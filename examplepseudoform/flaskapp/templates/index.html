@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+</head>
+<body>
+    <form id="dynamicForm">
+        <!-- Выводим строки формы из базы данных -->
+        {% for row in form_data %}
+            <div class="form-row" data-id="{{ row.id }}">
+                <!-- Поле 1 -->
+                <input type="text" name="field_1" value="{{ row.field_1 }}" placeholder="Field 1" required />
+
+                <!-- Поле 2 -->
+                <select name="field_2" class="field_2" required>
+                    <option value="">Select an option</option>
+                    <option value="test1" {% if row.field_2.strip() == 'test1' %}selected{% endif %}>test1</option>
+                    <option value="test2" {% if row.field_2.strip() == 'test2' %}selected{% endif %}>test2</option>
+                </select>
+
+                <!-- Поле 3 -->
+                <select name="field_3" class="field_3" required>
+                    <option value="">Select employee</option>
+                    <!-- Динамически добавляем опции в зависимости от field_2 -->
+                    {% if row.field_2.strip() == 'test1' %}
+                        <option value="employee3" {% if row.field_3.strip() == 'employee3' %}selected{% endif %}>employee3</option>
+                        <option value="employee4" {% if row.field_3.strip() == 'employee4' %}selected{% endif %}>employee4</option>
+                    {% elif row.field_2.strip() == 'test2' %}
+                        <option value="employee1" {% if row.field_3.strip() == 'employee1' %}selected{% endif %}>employee1</option>
+                        <option value="employee2" {% if row.field_3.strip() == 'employee2' %}selected{% endif %}>employee2</option>
+                    {% endif %}
+                </select>
+
+                <!-- Кнопка удаления -->
+                <button type="button" class="deleteRow">Delete</button>
+            </div>
+        {% endfor %}
+    </form>
+
+    <!-- Кнопки добавления и сохранения -->
+    <button id="addRow">Add Row</button>
+    <button id="saveState">Save</button>
+
+    <!-- Подключение JavaScript -->
+    <script src="/static/script.js"></script>
+</body>
+</html>
